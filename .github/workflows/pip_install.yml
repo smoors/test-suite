@@ -41,6 +41,8 @@ jobs:
             python -m pip install --user dist/eessi*.tar.gz
             find $HOME/.local
 
+            pwd
+            cd $HOME
             python -c 'import eessi.testsuite.utils; print(eessi.testsuite.utils.__file__)'
             python -c 'import eessi.testsuite.tests.apps; print(eessi.testsuite.tests.apps.__path__)'
 
