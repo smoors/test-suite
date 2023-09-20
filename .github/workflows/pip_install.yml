@@ -18,9 +18,7 @@ jobs:
         - name: Install setuptools
           run: |
             if [[ "${{ matrix.python }}" == "3.6" ]]; then
-              pip install setuptools==39.2.0
-            else
-              pip install -U setuptools
+              python -m pip install --user setuptools==39.2.0
             fi
 
         - name: Install ReFrame
@@ -34,7 +32,7 @@ jobs:
             python setup.py sdist
             ls dist
 
-            pip install --user dist/eessi*.tar.gz
+            python -m pip install --user dist/eessi*.tar.gz
             find $HOME/.local
 
             python -c 'import eessi.testsuite.utils'
