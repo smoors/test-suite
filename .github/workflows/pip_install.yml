@@ -15,9 +15,6 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Install setuptools ${{ matrix.setuptools-version }}
-          run: pip install setuptools==${{ matrix.setuptools-version }}
-
         - name: Install setuptools
           run: |
             if [[ "${{ matrix.python }}" == "3.6" ]]; then
