@@ -20,15 +20,15 @@ jobs:
           with:
             python-version: ${{ matrix.python-version }}
 
-        - name: Install setuptools
-          run: |
-            if [[ "${{ matrix.python-version }}" == "3.6" ]]; then
-              python -m pip install --user setuptools==39.2.0
-            fi
+#        - name: Install setuptools
+#          run: |
+#            if [[ "${{ matrix.python-version }}" == "3.6" ]]; then
+#              python -m pip install --user setuptools==39.2.0
+#            fi
 
         - name: Install ReFrame
           run: |
-            pip install --user ReFrame-HPC
+            python -m pip install --user ReFrame-HPC
 
         - name: Install EESSI test suite with 'pip install'
           run: |
@@ -42,3 +42,7 @@ jobs:
 
             python -c 'import eessi.testsuite.utils'
             python -c 'import eessi.testsuite.tests.apps'
+
+            python --version
+            python -m pip --version
+            python -c 'import setuptools; print(setuptools.__version__)'
