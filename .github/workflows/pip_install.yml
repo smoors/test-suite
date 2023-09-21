@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 permissions: read-all
 jobs:
   test_pip_install:
-    # ubuntu 20.04 is required for python 3.6
+    # ubuntu <= 20.04 is required for python 3.6
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -17,7 +17,7 @@ jobs:
             persist-credentials: false
 
         - name: Set up Python
-          uses: actions/setup-python@v4
+          uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1  # v4.7.0
           with:
             python-version: ${{ matrix.python-version }}
 
@@ -42,14 +42,12 @@ jobs:
             python -m pip install --user dist/eessi*.tar.gz
             find $HOME/.local
 
-            echo "PWD $PWD"
             # make sure we are not in the source directory
             cd $HOME
-            echo "PWD $PWD"
+
             python --version
             python -m pip --version
             python -c 'import setuptools; print("setuptools", setuptools.__version__)'
 
             python -c 'import eessi.testsuite.utils'
             python -c 'import eessi.testsuite.tests.apps'
-
