@@ -148,11 +148,25 @@ class EESSI_OSU_pt2pt_GPU(EESSI_OSU_pt2pt_Base, EESSI_Mixin):
 
     @run_after('setup')
     def skip_test_1gpu(self):
-        num_gpus = self.num_gpus_per_node * self.num_nodes
-        self.skip_if(
-            num_gpus != 2 and self.scale not in ['1_node', '2_nodes'],
-            f"Skipping test : {num_gpus} GPU(s) available for this test case, need exactly 2"
-        )
+        num_gpus = self.default_num_gpus_per_node * self.num_nodes
+        # On a partial node allocation, run this test only if exactly 2 GPUs are allocated
+        if self.scale not in ['1_node', '2_nodes']:
+            self.skip_if(
+                num_gpus != 2,
+                f"Skipping test : {num_gpus} GPU(s) available for this test case, need exactly 2"
+            )
+        # If the scale is 1_node, make sure there are at least 2 GPUs
+        elif self.scale == '1_node':
+            self.skip_if(num_gpus < 2, "Skipping GPU test : only 1 GPU available for this test case")
+
+    @run_after('setup')
+    def set_gpus_per_node(self):
+        if self.scale not in ['1_node', '2_nodes']:
+            self.num_gpus_per_node = 2  # make sure to allocate 2 GPUs
+        elif self.scale == '1_node':
+            self.num_gpus_per_node = self.default_num_gpus_per_node  # just allocate exclusively
+        else:
+            self.num_gpus_per_node = 1  # for multinode tests, we use 1 GPU per node
 
 
 @rfm.simple_test
