@@ -47,6 +47,7 @@ class EESSI_Mixin(RegressionMixin):
     bench_name_ci = None
     num_tasks_per_compute_unit = 1
     always_request_gpus = None
+    require_internet = False
 
     # Create ReFrame variables for logging runtime environment information
     cvmfs_repo_name = variable(str, value='None')
@@ -212,7 +213,7 @@ class EESSI_Mixin(RegressionMixin):
         Skip tests when download is required to run the test.
         And there is no workaround the run to the test without downloading the files.
         """
-        if self.module_name.split('/')[0] in ['GROMACS', 'MetalWalls', 'QuantumESPRESSO']:
+        if self.require_internet:
             if 'internet_access' in self.current_partition.extras:
                 if self.current_partition.extras['internet_access'] == 'offline':
                     msg = f'Test for {self.module_name} cannot be run on offline machine'
