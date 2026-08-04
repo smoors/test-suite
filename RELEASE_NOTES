@@ -1,6 +1,35 @@
 This file contains a description of the major changes to the EESSI test suite.
 For more detailed information, please see the git log.
 
+v1.0.0 (29 July 2026)
+---------------------
+This is a major release of the EESSI test-suite
+
+Bug fixes:
+* Use command line args for mpirun to do process binding, as environment variables are ignored for some newer OpenMPI versions (#305).
+* Some tests that should have run on 2 GPUs on the same node, would start running on 2 GPUs on different nodes (#291). This was fixed by setting the `use_nodes_option` scheduler option in the (common) ReFrame config (#310).
+* Factor out common configuration, to avoid having to duplicate this in every ReFrame config file for eveyr system (#310).
+* Fix issue where marking all files in the source dir as read-only caused issues from ReFrame 4.9.0 onwards (#318).
+* Fix issue where importing pkg_resources fails on Python >= 3.12 (#334).
+* Fix CI failure due to hpctestlib no longer being shipped in ReFrame >= 4.10 (#341)
+
+Enhancements:
+* Replace bench_name_ci with the more intuitive is_ci_test property (#301).
+* Only do hard checking of required_mem_per_node and readonly_files in CI, but demote to a warning by default (#302).
+* Add a check on process binding, to verify processes are bound correctly (#312, #338).
+* Added used_cpus_per_task test property, which may be different from number of CPUs the test will request from the scheduler (test.num_cpus_per_task) (#322, #336). Useful to make sure e.g. OSU tests will bind to individual cores instead of a larger set of cores (#321).
+* Use ReFrame programming environments to more easily test modules accross all EESSI versions, with a single ReFrame run (#326, #345).
+* Migrated MetalWalls to use the EESSI_Mixin class (#332).
+
+Other changes:
+* Added Reframe configuration file for the HCA experimental RISC-V cluster at BSC (#314).
+* Replace deprecated RegressionMixin with RegressionTestPlugin (#315).
+* Update ReFrame configuration for Hortense (#316).
+* Reduce verbosity on ReframeFatalErrors by not showing the traceback by default, but only when setting `TRACEBACK=1` in your enviromment (#319).
+* Update link that is reported when CPU autodetection fails (#324).
+* Update ReFrame configuration for AWS Magic Castle (#327).
+* Copy ReFrame's hpctestlib files into the EESSI test suite, since hpctestlib is no longer supported in ReFrame (#328).
+
 v0.9.0 (23 December 2025)
 ---------------------
 This is a minor release of the EESSI test-suite

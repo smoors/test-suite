@@ -113,7 +113,7 @@ partition_defaults = {
     ] + list(SCALES.keys()),
     'prepare_cmds': [
         # This system doesn't have an lmod installation by default, so source one from EESSI
-        'source /cvmfs/software.eessi.io/2025.06/init/lmod/bash',
+        'source /cvmfs/software.eessi.io/versions/2025.06/init/lmod/bash',
         'module unload EESSI',
         # Required when using srun as launcher with --export=NONE in partition access, in order to ensure job
         # steps inherit environment. It doesn't hurt to define this even if srun is not used

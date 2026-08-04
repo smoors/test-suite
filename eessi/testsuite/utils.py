@@ -174,12 +174,12 @@ def find_modules(regex: str, environ_mapping=None, name_only=True) -> Iterator[T
         if part.fullname not in _modules_cache:
             _modules_cache[part.fullname] = {}
         for env in part.environs:
-            rt.loadenv(part.local_env, env)
             if env.name not in _modules_cache[part.fullname]:
                 log(f'Getting available modules for ({part.fullname}, {env.name})')
+                rt.loadenv(part.local_env, env)
                 available_modules = sorted(ms.available_modules())
                 _modules_cache[part.fullname][env.name] = [mod for mod in available_modules if not mod.endswith('/')]
-            snap0.restore()
+                snap0.restore()
             seen = set()
             dupes = []
             for mod in _modules_cache[part.fullname][env.name]:
