@@ -6,7 +6,7 @@ from reframe.core.exceptions import ConfigError
 from reframe.core.logging import getlogger
 
 from eessi.testsuite.constants import FEATURES
-from eessi.testsuite.utils import EESSIError, log, log_once
+from eessi.testsuite.utils import EESSIError
 
 
 def reframe_version_is_supported():
