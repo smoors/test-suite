@@ -62,7 +62,8 @@ site_configuration = {
                     'scheduler': 'slurm',
                     'prepare_cmds': [
                         'module --force purge',
-                        # We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
+                        # We need to unset SLURM_EXPORT_ENV in the job.
+                        # Because this causes problems for `mpirun`.
                         'unset SLURM_EXPORT_ENV',
                     ],
                     'access': hortense_access + ['--partition=cpu_milan_rhel9'],
@@ -88,7 +89,8 @@ site_configuration = {
                     'scheduler': 'slurm',
                     'prepare_cmds': [
                         'module --force purge',
-                        # We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
+                        # We need to unset SLURM_EXPORT_ENV in the job.
+                        # Because otherwise this causes problems for `mpirun`.
                         'unset SLURM_EXPORT_ENV',
                     ],
                     'access': hortense_access + ['--partition=gpu_rome_a100_80_rhel9'],
