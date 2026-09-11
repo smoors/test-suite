@@ -46,7 +46,7 @@ class EESSIError(ReframeFatalError):
         addendum = '\nRerun with `TRACEBACK=1 reframe ...` to show the full traceback.'
 
     def __str__(self):
-        return super().__str__() + EESSIError.addendum
+        return f'\033[31m{super().__str__()}\033[0m{EESSIError.addendum}'
 
 
 def log(msg, logger=printer.debug):

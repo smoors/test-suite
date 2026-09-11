@@ -1,9 +1,48 @@
 import json
 import os
 
+from reframe.core.config import load_config
+from reframe.core.exceptions import ConfigError
 from reframe.core.logging import getlogger
 
 from eessi.testsuite.constants import FEATURES
+from eessi.testsuite.utils import EESSIError, log, log_once
+
+
+def reframe_version_is_supported():
+    testconfig = load_config()
+    testconfig.update_config({
+        'systems': [{
+            'name': 'config_probe',
+            'hostnames': ['.*'],
+            'partitions': [{
+                'name': 'default',
+                'scheduler': 'local',
+                'launcher': 'local',
+                'environs': ['EESSI-2025.06'],
+                'features': ['4_nodes'],
+            }],
+        }],
+        'environments': [{
+            'name': 'EESSI-2025.06',
+        }],
+    }, '<config-probe>')
+
+    try:
+        testconfig.validate()
+    except ConfigError:
+        return False
+
+    return True
+
+
+if not reframe_version_is_supported():
+    msg = ' '.join([
+        'The EESSI test suite does not support this ReFrame version.',
+        'Unsupported versions: 4.10.1, 4.10.2, 4.10.3',
+    ])
+    raise EESSIError(msg)
+
 
 perflog_format = '|'.join([
     '%(check_job_completion_time)s',
