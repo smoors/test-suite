@@ -24,6 +24,7 @@ from eessi.testsuite.common_config import (common_general_config, common_logging
                                            get_sbatch_account, set_common_required_config)
 from eessi.testsuite.constants import EXTRAS, DEVICE_TYPES, FEATURES, GPU_VENDORS, SCALES
 
+# We need to pass `--export=NONE` so that we have a clean environment in the jobs
 hortense_access = ['--export=NONE', '--get-user-env']
 
 # Note that we rely on the SBATCH_ACCOUNT environment variable to be specified
@@ -39,13 +40,11 @@ common_env_vars = [
     ['OMPI_MCA_orte_keep_fqdn_hostnames', '1'],
     ['PRTE_MCA_prte_keep_fqdn_hostnames', '1']
 ]
-# We need to pass `--export=NONE` so that we have a clean environment in the jobs
-# We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
-post_init = 'unset SLURM_EXPORT_ENV'
-launcher = "mpirun"
-#eessi_modulepath = '/cvmfs/software.eessi.io/init/modules'
-#prepare_eessi_init = f"module --force purge && module use {eessi_modulepath}"
-prepare_init = 'module --force purge'
+
+eessi_prepare_cmds = [
+    'module use /cvmfs/software.eessi.io/init/modules',
+]
+
 
 site_configuration = {
     'systems': [
@@ -62,8 +61,9 @@ site_configuration = {
                     'name': 'cpu_milan_rhel9',
                     'scheduler': 'slurm',
                     'prepare_cmds': [
-                        prepare_init,
-                        post_init,
+                        'module --force purge',
+                        # We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
+                        'unset SLURM_EXPORT_ENV',
                     ],
                     'access': hortense_access + ['--partition=cpu_milan_rhel9'],
                     'env_vars': common_env_vars,
@@ -72,7 +72,7 @@ site_configuration = {
                     },
                     'descr': 'CPU nodes (AMD Milan, 256GiB RAM)',
                     'max_jobs': 20,
-                    'launcher': launcher,
+                    'launcher': 'mpirun',
                     'environs': ['cpu_milan'],
                     'features': [
                         FEATURES.CPU,
@@ -87,8 +87,9 @@ site_configuration = {
                     'name': 'gpu_rome_a100_80',
                     'scheduler': 'slurm',
                     'prepare_cmds': [
-                        prepare_init,
-                        post_init,
+                        'module --force purge',
+                        # We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
+                        'unset SLURM_EXPORT_ENV',
                     ],
                     'access': hortense_access + ['--partition=gpu_rome_a100_80_rhel9'],
                     'env_vars': common_env_vars,
@@ -97,7 +98,7 @@ site_configuration = {
                     },
                     'descr': 'GPU nodes (A100 80GB)',
                     'max_jobs': 20,
-                    'launcher': launcher,
+                    'launcher': 'mpirun',
                     'environs': ['gpu_rome_a100'],
                     'features': [
                         FEATURES.GPU,
@@ -134,4 +135,4 @@ site_configuration = {
 }
 
 # Set common Slurm config options
-set_common_required_config(site_configuration)
+set_common_required_config(site_configuration, eessi_prepare_cmds=eessi_prepare_cmds)
