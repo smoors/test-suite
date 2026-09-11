@@ -43,8 +43,9 @@ common_env_vars = [
 # We need to unset SLURM_EXPORT_ENV in the job because otherwise this causes problems for `mpirun`
 post_init = 'unset SLURM_EXPORT_ENV'
 launcher = "mpirun"
-eessi_modulepath = '/cvmfs/software.eessi.io/init/modules'
-prepare_eessi_init = f"module --force purge && module use {eessi_modulepath}"
+#eessi_modulepath = '/cvmfs/software.eessi.io/init/modules'
+#prepare_eessi_init = f"module --force purge && module use {eessi_modulepath}"
+prepare_init = 'module --force purge'
 
 site_configuration = {
     'systems': [
@@ -61,7 +62,7 @@ site_configuration = {
                     'name': 'cpu_milan_rhel9',
                     'scheduler': 'slurm',
                     'prepare_cmds': [
-                        prepare_eessi_init,
+                        prepare_init,
                         post_init,
                     ],
                     'access': hortense_access + ['--partition=cpu_milan_rhel9'],
@@ -86,7 +87,7 @@ site_configuration = {
                     'name': 'gpu_rome_a100_80',
                     'scheduler': 'slurm',
                     'prepare_cmds': [
-                        prepare_eessi_init,
+                        prepare_init,
                         post_init,
                     ],
                     'access': hortense_access + ['--partition=gpu_rome_a100_80_rhel9'],
