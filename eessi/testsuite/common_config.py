@@ -20,10 +20,12 @@ def reframe_version_is_supported():
                 'scheduler': 'local',
                 'launcher': 'local',
                 'environs': ['EESSI-2025.06'],
-                'features': ['4_nodes'],
+                # feature names starting with a digit must be supported
+                'features': ['16_nodes'],
             }],
         }],
         'environments': [{
+            # environment names containing dots must be supported
             'name': 'EESSI-2025.06',
         }],
     }, '<config-probe>')
@@ -38,8 +40,9 @@ def reframe_version_is_supported():
 
 if not reframe_version_is_supported():
     msg = ' '.join([
-        'The EESSI test suite does not support this ReFrame version.',
-        'Unsupported versions: 4.10.1, 4.10.2, 4.10.3',
+        'The EESSI test suite does not support this ReFrame version due to feature name and environment name',
+        'restrictions. Unsupported versions: 4.10.1, 4.10.2, 4.10.3.',
+        'See https://github.com/reframe-hpc/reframe/issues/3723 for details.',
     ])
     raise EESSIError(msg)
 
